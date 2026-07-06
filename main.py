@@ -7,11 +7,13 @@ def get_affiliate_link(product_url: str) -> str:
 
 if __name__ == "__main__":
     # 여러 상품 URL을 리스트로 준비
-    products = [
-        "https://ko.aliexpress.com/item/1005010661950273.html",
-        "https://ko.aliexpress.com/item/987654321.html",
-        "https://ko.aliexpress.com/item/123456789.html"
-    ]
+   products = [
+    "https://ko.aliexpress.com/item/1005010661950273.html",
+    "https://ko.aliexpress.com/item/987654321.html",
+    "https://ko.aliexpress.com/item/123456789.html",
+    "https://ko.aliexpress.com/item/555555555.html",
+    "https://ko.aliexpress.com/item/666666666.html"
+]
 
     # 실행할 때마다 랜덤으로 하나 선택
     product_url = random.choice(products)
