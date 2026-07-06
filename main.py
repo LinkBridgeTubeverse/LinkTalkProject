@@ -56,26 +56,4 @@ def upload_video(ep):
         part="snippet,status",
         body={
             "snippet": {
-                "title": ep["title"],
-                "description": description,
-                "tags": ep["tags"],
-                "categoryId": "24"
-            },
-            "status": {
-                "privacyStatus": "public",
-                "publishAt": ep["publish_time"]
-            }
-        },
-        media_body=MediaFileUpload(ep["file"], chunksize=-1, resumable=True)
-    )
-    response = request.execute()
-    print(f"Uploaded: {ep['title']} (Video ID: {response['id']})")
-    return response['id']
-
-if __name__ == "__main__":
-    video_ids = []
-    for ep in episodes:
-        vid = upload_video(ep)
-        video_ids.append(vid)
-
-    print("모든 영상 업로드 완료. 랜덤 상품 링크가 각 영상 설명에 추가되었습니다.")
+                "title": ep["title
