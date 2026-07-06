@@ -1,13 +1,16 @@
 import os
+import json
 import random
+from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
 
-# YouTube API 초기화
-def get_youtube_service():
-    return build("youtube", "v3", developerKey=os.environ["YOUTUBE_API_KEY"])
-
-youtube = get_youtube_service()
+# 서비스 계정 인증 불러오기
+credentials = service_account.Credentials.from_service_account_info(
+    json.loads(os.environ["YOUTUBE_SERVICE_ACCOUNT"]),
+    scopes=["https://www.googleapis.com/auth/youtube.upload"]
+)
+youtube = build("youtube", "v3", credentials=credentials)
 
 # 제휴 링크 생성 함수
 def get_affiliate_link(product_url: str) -> str:
