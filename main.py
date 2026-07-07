@@ -14,7 +14,7 @@ youtube = build("youtube", "v3", credentials=credentials)
 
 # 제휴 링크 생성 함수
 def get_affiliate_link(product_url: str) -> str:
-    affiliate_id = os.environ["AFFILIATE_ID"]  # GitHub Secrets에 등록한 값 (_c4owRCtR)
+    affiliate_id = os.environ["AFFILIATE_ID"]  # GitHub Secrets에 등록한 값
     return f"https://s.click.aliexpress.com/e/{affiliate_id}?target={product_url}"
 
 # 상품 리스트 (랜덤 선택 대상)
@@ -56,4 +56,26 @@ def upload_video(ep):
         part="snippet,status",
         body={
             "snippet": {
-                "title": ep["title
+                "title": ep["title"],
+                "description": description,
+                "tags": ep["tags"],
+                "categoryId": "24"
+            },
+            "status": {
+                "privacyStatus": "public",
+                "publishAt": ep["publish_time"]
+            }
+        },
+        media_body=MediaFileUpload(ep["file"], chunksize=-1, resumable=True)
+    )
+    response = request.execute()
+    print(f"Uploaded: {ep['title']} (Video ID: {response['id']})")
+    return response['id']
+
+if __name__ == "__main__":
+    video_ids = []
+    for ep in episodes:
+        vid = upload_video(ep)
+        video_ids.append(vid)
+
+    print("모든 영상 업로드 완료. 랜덤 상품 링크가 각 영상 설명에 추가되었습니다.")
