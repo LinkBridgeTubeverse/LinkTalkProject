@@ -1,17 +1,30 @@
-- name: Set up Python
-  uses: actions/setup-python@v4
-  with:
-    python-version: '3.11'
-- name: Install dependencies
-  run: |
-    python3.11 -m pip install --upgrade pip
-    python3.11 -m pip install google-api-python-client google-auth
-    python3.11 -m pip install -r requirements.txt
+name: Update OpenWiki
 
-- name: Verify installation
-  run: python3.11 -m pip list
+on:
+  workflow_dispatch:
 
-- name: Run OpenWiki
-  run: python3.11 main.py
-  env:
-    OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+jobs:
+  update-openwiki:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python3.11 -m pip install --upgrade pip
+          python3.11 -m pip install google-api-python-client google-auth
+          python3.11 -m pip install -r requirements.txt
+
+      - name: Verify installation
+        run: python3.11 -m pip list
+
+      - name: Run OpenWiki
+        run: python3.11 main.py
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
