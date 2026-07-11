@@ -1,17 +1,44 @@
 import os
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
+from google_auth_oauthlib.flow import InstalledAppFlow
+from google.auth.transport.requests import Request
+import json
+
+# 📌 접근 권한 범위 (YouTube 업로드 권한)
+SCOPES = ["https://www.googleapis.com/auth/youtube.upload"]
+
+def get_credentials():
+    creds = None
+    # token.json이 이미 있으면 불러오기
+    if os.path.exists("token.json"):
+        with open("token.json", "r") as token:
+            creds_data = json.load(token)
+            from google.oauth2.credentials import Credentials
+            creds = Credentials.from_authorized_user_info(creds_data, SCOPES)
+
+    # 없거나 만료되었으면 새로 인증
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+            creds.refresh(Request())
+        else:
+            flow = InstalledAppFlow.from_client_secrets_file("client_secret.json", SCOPES)
+            creds = flow.run_local_server(port=0)
+
+        # 새 토큰 저장
+        with open("token.json", "w") as token:
+            token.write(creds.to_json())
+
+    return creds
 
 def main():
-    # 🔑 GitHub Secrets에서 불러온 환경 변수 (API 키)
-    api_key = os.getenv("YOUTUBE_API_KEY")
-    if not api_key:
-        raise ValueError("YOUTUBE_API_KEY 환경 변수가 설정되지 않았습니다.")
+    # 🔑 OAuth 인증 진행
+    creds = get_credentials()
 
     # 📺 YouTube API 클라이언트 초기화
-    youtube = build("youtube", "v3", developerKey=api_key)
+    youtube = build("youtube", "v3", credentials=creds)
 
-    # 📂 업로드할 영상 파일 (저장소 루트에 있는 sample_video.mp4)
+    # 📂 업로드할 영상 파일
     video_file = "sample_video.mp4"
 
     # 📝 업로드할 영상 메타데이터
