@@ -1,6 +1,6 @@
-import os
-from googleapiclient.discovery import build
-from googleapiclient.http import MediaFileUpload
+import sys
+print("Python 실행 경로:", sys.executable)
+print("Python 버전:", sys.version)
 
 def main():
     # 🔑 GitHub Secrets에서 불러온 환경 변수 (API 키)
