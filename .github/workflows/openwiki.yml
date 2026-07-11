@@ -22,7 +22,10 @@ jobs:
           pip3 install -r requirements.txt
 
       - name: Verify installation
-        run: pip3 list
+        run: |
+          python3 -m pip show google-api-python-client
+          python3 -m pip show google-auth
+          pip3 list
 
       - name: Run OpenWiki
         run: python3 main.py
