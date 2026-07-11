@@ -18,7 +18,6 @@ jobs:
       - name: Install dependencies
         run: |
           python3.11 -m pip install --upgrade pip
-          python3.11 -m pip install google-api-python-client google-auth
           python3.11 -m pip install -r requirements.txt
 
       - name: Verify installation
